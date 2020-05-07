@@ -38,7 +38,7 @@ public class DialogManagerAction extends AnAction {
         JPanel panel = new JPanel(new MigLayout());
         JLabel label = new JLabel("<html>" +
                 "<p>Enter the data in the following format tablename:field_name:sys_id</p>" +
-                "<p>(E.g. script:sys_script:457744279fb302c01526317f842e7063)</p>" +
+                "<p>(E.g. sys_script:457744279fb302c01526317f842e7063:script)</p>" +
                 "</html>");
 
         JTextField input = new JTextField(30);

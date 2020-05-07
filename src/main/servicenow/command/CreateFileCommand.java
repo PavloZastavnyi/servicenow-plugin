@@ -10,15 +10,18 @@ import com.intellij.openapi.command.WriteCommandAction;
 public class CreateFileCommand {
     public static PsiFile createTempPsiFile(@NotNull final Project project, @NotNull final String text, @NotNull final String filename, final PsiDirectory directory) {
         String[] arr = filename.split(":");
-        if (arr.length < 3) {
+        if (arr.length < 2) {
             System.exit(1);
         }
+
+        String sys_id = arr[0];
+        String field = arr[1];
 
         try {
             final PsiFile[] file = new PsiFile[1];
             final PsiFile[] ffile = new PsiFile[1];
             WriteCommandAction.runWriteCommandAction(project, () -> {
-                file[0] = PsiFileFactory.getInstance(project).createFileFromText(arr[0] + "." + arr[1] + "." + arr[2] + ".js",
+                file[0] = PsiFileFactory.getInstance(project).createFileFromText(sys_id + "." + field + ".js",
                         StdFileTypes.JS,
                         text, LocalTimeCounter.currentTime(), true);
                 ffile[0] = (PsiFile) directory.add(file[0]);

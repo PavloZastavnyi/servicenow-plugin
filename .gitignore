@@ -1,1 +1,9 @@
-# Created by .ignore support plugin (hsz.mobi)
+# Ignore idea files
+.idea/
+*.iml
+
+# Ignore out files
+out/
+
+# Ignore build plugin
+ServiceNow Plugin ext.zip

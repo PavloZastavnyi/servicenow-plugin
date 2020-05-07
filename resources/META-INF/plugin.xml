@@ -1,7 +1,7 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>com.service-now.plugin.idea</id>
-    <name>ServiceNow Plugin</name>
-    <version>0.1.1</version>
+    <name>ServiceNow script editor</name>
+    <version>0.1.2</version>
     <vendor email="r@richardszolar.me" url="https://richardszolar.me/">Richard Szolár</vendor>
 
     <description><![CDATA[
