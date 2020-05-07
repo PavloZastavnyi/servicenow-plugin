@@ -33,7 +33,7 @@ public class ScriptUploadAction extends AnAction {
 
         VirtualFile virtualFile = (VirtualFile) anActionEvent.getDataContext().getData(PlatformDataKeys.VIRTUAL_FILE.getName());
         assert virtualFile != null;
-        String filename = virtualFile.getName();
+        String filename = virtualFile.getParent().getName() + '.' +virtualFile.getName();
         String contents = null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(virtualFile.getPath()));

@@ -50,6 +50,10 @@ public class HttpClient {
             return;
         }
 
+        String table = arr[0];
+        String sys_id = arr[1];
+        String field = arr[2];
+
         //read config
         Boolean configExists = Config.exists(directory);
         JsonObject jsObj = null;
@@ -58,9 +62,12 @@ public class HttpClient {
             jsObj = new JsonParser().parse(file.getText()).getAsJsonObject();
         }
 
+        PsiDirectory scriptDirectory = directory.findSubdirectory(table) == null ? directory.createSubdirectory(table) : directory.findSubdirectory(table);
+        String scriptFilename = sys_id + ':' + field;
+
         try {
             assert jsObj != null;
-            String url = "https://" + jsObj.get("domain").getAsString() + "/api/now/table/" + arr[1] + "?sysparm_query=sys_id%3D" + arr[2] + "&sysparm_fields=" + arr[0] + "&sysparm_limit=1";
+            String url = "https://" + jsObj.get("domain").getAsString() + "/api/now/table/" + table + "?sysparm_query=sys_id%3D" + sys_id + "&sysparm_fields=" + field + "&sysparm_limit=1";
 
             Request request = new Request.Builder()
                     .url(url)
@@ -76,10 +83,10 @@ public class HttpClient {
                 public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    String script = new JsonParser().parse(response.body().string()).getAsJsonObject().getAsJsonArray("result").get(0).getAsJsonObject().get("script").getAsString();
+                    String script = new JsonParser().parse(response.body().string()).getAsJsonObject().getAsJsonArray("result").get(0).getAsJsonObject().get(field).getAsString();
 
                     SwingUtilities.invokeLater(() -> {
-                        PsiFile pFile = CreateFileCommand.createTempPsiFile(project, script.replace("\r\n", "\n"), filename, directory);
+                        PsiFile pFile = CreateFileCommand.createTempPsiFile(project, script.replace("\r\n", "\n"), scriptFilename, scriptDirectory);
                         if (pFile != null) {
                             pFile.navigate(true);
                         }
@@ -100,6 +107,10 @@ public class HttpClient {
             return;
         }
 
+        String table = arr[0];
+        String sys_id = arr[1];
+        String field = arr[2];
+
         //read config
         VirtualFile baseDir = project.getBaseDir();
         PsiDirectory directory = PsiManager.getInstance(project).findDirectory(baseDir);
@@ -113,9 +124,9 @@ public class HttpClient {
 
         assert jsObj != null;
 
-        String url = "https://" + jsObj.get("domain").getAsString() + "/api/now/table/" + arr[1] + "/" + arr[2] + "?sysparm_fields=" + arr[0];
+        String url = "https://" + jsObj.get("domain").getAsString() + "/api/now/table/" + table + "/" + sys_id + "?sysparm_fields=" + field;
         JsonObject obj = new JsonObject();
-        obj.addProperty("script", code);
+        obj.addProperty(field, code);
 
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, String.valueOf(obj));
